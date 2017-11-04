@@ -1,6 +1,6 @@
 '''Authorizer Example with mock identity provider'''
 
-from pyauthlib import UserInfo, MethodArn, AuthPolicy, HttpMethod
+from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
 
 
 class IdpClient(object):
@@ -29,19 +29,16 @@ def lambda_handler(event, _context):
         Users are allowed read access to all resources.
         Admins are allowed full access to all resources.
     '''
-    called_method = MethodArn.parse(event['methodArn'])
-
-    _, access_token = event['authorizationToken'].split(' ')
-    user_info = IdpClient().user_info(access_token)
-
+    event = parse_event(event)
+    user_info = IdpClient().user_info(event.access_token)
     policy = AuthPolicy(user_info)
 
     if not user_info:
-        policy.deny(called_method.copy(method=HttpMethod.ALL, resource='*'))
+        policy.deny(event.arn(method=HttpMethod.ALL, resource='*'))
     elif 'ROLE_ADMIN' in user_info.authorities:
-        policy.allow(called_method.copy(method=HttpMethod.ALL, resource='*'))
+        policy.allow(event.arn(method=HttpMethod.ALL, resource='*'))
     else:
-        policy.allow(called_method.copy(method=HttpMethod.GET, resource='*'))
+        policy.allow(event.arn(method=HttpMethod.GET, resource='*'))
 
     return policy.build()
 
