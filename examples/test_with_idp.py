@@ -30,7 +30,9 @@ def lambda_handler(event, _context):
         Admins are allowed full access to all resources.
     '''
     called_method = MethodArn.parse(event['methodArn'])
-    user_info = IdpClient().user_info(event['authorizationToken'])
+
+    _, access_token = event['authorizationToken'].split(' ')
+    user_info = IdpClient().user_info(access_token)
 
     policy = AuthPolicy(user_info)
 
@@ -47,7 +49,7 @@ def lambda_handler(event, _context):
 def test_unauthenticated():
     '''Test the policy of an unauthenticated user'''
     event = dict(
-        authorizationToken='toll_troll',
+        authorizationToken='Bearer toll_troll',
         methodArn='arn:aws:execute-api:us-east-1:account_id:rest_api_id/prod/GET/'
     )
 
@@ -73,7 +75,7 @@ def test_unauthenticated():
 def test_user():
     '''Test the policy of a read-only user'''
     event = dict(
-        authorizationToken='user_token',
+        authorizationToken='Bearer user_token',
         methodArn='arn:aws:execute-api:us-east-1:account_id:rest_api_id/prod/GET/'
     )
 
@@ -99,7 +101,7 @@ def test_user():
 def test_admin():
     '''Test the policy of an admin user'''
     event = dict(
-        authorizationToken='admin_token',
+        authorizationToken='Bearer admin_token',
         methodArn='arn:aws:execute-api:us-east-1:account_id:rest_api_id/prod/GET/'
     )
 
