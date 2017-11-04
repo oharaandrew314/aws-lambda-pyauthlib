@@ -41,4 +41,4 @@ Quickstart
 
 This library is meant to give you a set of commonly used modules which you can use to make your own AWS API Gateway Custom Authorizers.
 
-Go check out the examples folder!
+Go check out the `examples <https://github.com/oharaandrew314/aws-lambda-pyauthlib/tree/master/examples>`_!
