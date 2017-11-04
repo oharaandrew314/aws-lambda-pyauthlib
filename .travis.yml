@@ -1,0 +1,20 @@
+sudo: false
+language: python
+python:
+- '2.7'
+- '3.6'
+install:
+- pip install pipenv --quiet
+- pipenv lock
+- make
+- pip install --quiet codecov
+script:
+- make test
+after_success:
+- codecov
+deploy:
+  provider: pypi
+  user: ohara.andrew314
+  password:
+    secure: pgOCdr3JPGVCMpMiEt9i6m4th4yVfXETExbOMcgNikDR7m38dyVvnKHbtJFd9Z+RpDCG/DxtM3P83rMSP5r5bUyGaOa2L54rjWbquayOLFQmmniZOY+CvEF3SIKm5UwWcGC+li2Qu3RG+hGhlkf7cijAunVadzz5AZCE4nfx1eUCppedJDiRMI9M6Vt0EZvnPGl8q2/i7rSAtb8nRA8uAwwgCrqnSO+hRDKgDwt0Vz3cICQvmRpEVXT9nOWA7aF4Af3qT9qRQ5upqfiVKin4ZqhKS7MdmmhxgEnX4XINgky+b744kidlHebdBO0rhuxINafQfF7FjF5BJcKK19qVee19E7l6ukof44pXDq/q13a6s2pHi865Zq4PNTIDeyToIAT/4J7QLN6IJChHZGvTjiAFVPUBHWKJ9tLaJjIRAQqQ99pJP2oPNn9A0ZgC7F4sKdjdwOsyNCx4l5dV3NXvi8ra/eCJ5UIjbtixcH1nLKpjf5hqw7M5V7W0OrUoqbyAWKHm6RIKfv+AydURRt3WcYW7FJAROCp9gsuoZClKBvs4OFWBlHXorZNrHDG2vF+nCZ9aHZZnAFTaJErFfJiSGdqYayI6unY5XBeW3Zm8QLrQuSFxq/u2wTJ8OTI+EmLQe14/9wn92wcnxnXqz3DwN4SsRw5+qbpZUvbq1MOAE+Y=
+cache: pip
