@@ -43,6 +43,7 @@ Quickstart
 
 .. code-block:: python
 
+    '''authorizer_handler.py'''
     from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
     from my_auth_client import get_cliient
 
