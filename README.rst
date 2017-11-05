@@ -45,7 +45,7 @@ Quickstart
 
     '''authorizer_handler.py'''
     from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
-    from my_auth_client import get_cliient
+    from my_auth_client import get_client
 
     def lambda_handler(event, _context):
         '''Exchanges access token for user_info and returns the policy.
