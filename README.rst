@@ -14,7 +14,7 @@ aws-lambda-pyauthlib
     :target: https://pypi.org/project/aws-lambda-pyauthlib
 
 .. image:: https://img.shields.io/pypi/pyversions/aws-lambda-pyauthlib.svg
-    :target: https://pypi.org/aws-lambda-pyauthlib
+    :target: https://pypi.org/project/aws-lambda-pyauthlib
     
 .. image:: https://codecov.io/github/oharaandrew314/aws-lambda-pyauthlib/coverage.svg?branch=master
     :target: https://codecov.io/github/oharaandrew314/aws-lambda-pyauthlib
