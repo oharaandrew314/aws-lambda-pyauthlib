@@ -16,10 +16,7 @@ class IdpClient(object):
 
     def user_info(self, access_token):
         '''Return the user_info associated with the access token, or None'''
-        if access_token not in self.GRANTS:
-            return None
-
-        return self.GRANTS[access_token]
+        return self.GRANTS.get(access_token)
 
 
 def lambda_handler(event, _context):
