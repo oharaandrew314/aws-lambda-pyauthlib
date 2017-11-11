@@ -22,6 +22,8 @@ aws-lambda-pyauthlib
 
 A python helper library for AWS API Gateway Custom Authorizers.
 
+*pyauthlib* is meant to give you a set of commonly used modules to make your own AWS API Gateway Custom Authorizers.
+
 Installation
 ------------
 
@@ -39,6 +41,34 @@ or
 Quickstart
 ----------
 
-This library is meant to give you a set of commonly used modules which you can use to make your own AWS API Gateway Custom Authorizers.
+.. code-block:: python
+
+    '''authorizer_handler.py'''
+    from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
+    from my_auth_client import get_client
+
+    def lambda_handler(event, _context):
+        '''Exchanges access token for user_info and returns the policy.
+            Unauthorized users are denied all access.
+            Users are allowed read access to all resources.
+            Admins are allowed full access to all resources.
+        '''
+        event = parse_event(event)
+    
+        identity = get_client().get_identity(event.access_token)
+        user_info = UserInfo(identity['user_id'], identity['grants'])
+        policy = AuthPolicy(user_info)
+
+        if not user_info:
+            policy.deny(event.arn(method=HttpMethod.ALL, resource='*'))
+        elif 'ROLE_ADMIN' in user_info.authorities:
+            policy.allow(event.arn(method=HttpMethod.ALL, resource='*'))
+        else:
+            policy.allow(event.arn(method=HttpMethod.GET, resource='*'))
+
+        return policy.build()
+    
+More Information
+----------------
 
 Go check out the `examples <https://github.com/oharaandrew314/aws-lambda-pyauthlib/tree/master/examples>`_!

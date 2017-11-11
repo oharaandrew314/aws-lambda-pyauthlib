@@ -7,16 +7,6 @@ from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
 
 JWT_SECRET = 'secret'
 
-USER_JWT_TOKEN = jwt.encode(
-    dict(user_id='user', authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY'),
-    JWT_SECRET
-).decode('utf-8')
-
-ADMIN_JWT_TOKEN = jwt.encode(
-    dict(user_id='admin', authorities='ROLE_ADMIN'),
-    JWT_SECRET
-).decode('utf-8')
-
 
 def lambda_handler(event, _context):
     '''Decodes JWT token into UserInfo and returns the policy.
@@ -72,8 +62,13 @@ def test_unauthenticated():
 
 def test_user():
     '''Test the policy of a read-only user'''
+    jwt_token = jwt.encode(
+        dict(user_id='user', authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY'),
+        JWT_SECRET
+    ).decode('utf-8')
+
     event = dict(
-        authorizationToken='Bearer ' + USER_JWT_TOKEN,
+        authorizationToken='Bearer ' + jwt_token,
         methodArn='arn:aws:execute-api:us-east-1:account_id:rest_api_id/prod/GET/'
     )
 
@@ -98,8 +93,13 @@ def test_user():
 
 def test_admin():
     '''Test the policy of an admin user'''
+    jwt_token = jwt.encode(
+        dict(user_id='admin', authorities='ROLE_ADMIN'),
+        JWT_SECRET
+    ).decode('utf-8')
+
     event = dict(
-        authorizationToken='Bearer ' + ADMIN_JWT_TOKEN,
+        authorizationToken='Bearer ' + jwt_token,
         methodArn='arn:aws:execute-api:us-east-1:account_id:rest_api_id/prod/GET/'
     )
 
