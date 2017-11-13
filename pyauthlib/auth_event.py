@@ -1,5 +1,7 @@
 '''Auth Event'''
 
+from traceback import print_exc
+
 from pyauthlib import MethodArn
 
 
@@ -9,7 +11,11 @@ class AuthEvent(object):
     @classmethod
     def parse(cls, event):
         '''Parse the AWS-provided authorization event.  Raises ValueError'''
-        token_type, access_token = event['authorizationToken'].split(' ')
+        try:
+            token_type, access_token = event['authorizationToken'].split(' ')
+        except ValueError:
+            print_exc()
+            raise Exception('Unauthorized')
 
         return cls(
             token_type,

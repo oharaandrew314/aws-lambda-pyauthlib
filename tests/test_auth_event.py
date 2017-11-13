@@ -7,11 +7,13 @@ from pyauthlib import parse_event
 
 def test_invalid_access_token():
     '''Test parsing event with invalid access token'''
-    with pytest.raises(ValueError):
+    with pytest.raises(Exception) as ex_info:
         parse_event(dict(
             methodArn='arn:aws:execute-api:us-east-1:account_id:"rest_api_id/test/GET/',
             authorizationToken='foobar'
         ))
+
+    assert str(ex_info.value) == 'Unauthorized'
 
 
 def test_parse_event():
