@@ -22,8 +22,6 @@ aws-lambda-pyauthlib
 
 A python helper library for AWS API Gateway Custom Authorizers.
 
-*pyauthlib* is meant to give you a set of commonly used modules to make your own AWS API Gateway Custom Authorizers.
-
 Installation
 ------------
 
