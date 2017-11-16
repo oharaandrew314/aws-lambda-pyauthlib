@@ -93,3 +93,9 @@ def test_copy_to_root_resource():
 
     updated = method.copy(resource='')
     assert updated.resource == ''
+
+
+def test_with_tilde():
+    arn_string = 'arn:aws:execute-api:us-east-1:1234567890:abcdefgh/latest/GET/some/path~foo'
+    method = MethodArn.parse(arn_string)
+    assert method.resource == 'some/path~foo'

@@ -9,7 +9,7 @@ from .http_method import HttpMethod
 class MethodArn(object):
     '''Parses useful information from the Method ARN'''
 
-    PATH_REGEX = re.compile(r'^[/.a-zA-Z0-9-\*]+$')
+    PATH_REGEX = re.compile(r'^[/~.a-zA-Z0-9-\*]+$')
 
     @classmethod
     def parse(cls, method_arn):
