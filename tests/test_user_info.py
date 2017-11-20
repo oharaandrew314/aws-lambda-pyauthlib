@@ -11,14 +11,14 @@ def test_parse_json_dict():
         user_id='user1',
         authorities=['authority1', 'authority2']
     ))
-    assert user1.user_id == 'user1'
+    assert user1.principal_id == 'user1'
     assert user1.authorities == ['authority1', 'authority2']
 
     user2 = UserInfo.from_json(dict(
         user_id='user2',
         authorities='authority1,authority2'
     ))
-    assert user2.user_id == 'user2'
+    assert user2.principal_id == 'user2'
     assert user2.authorities == ['authority1', 'authority2']
 
 
@@ -27,15 +27,29 @@ def test_parse_json_str():
     user1 = UserInfo.from_json(
         '{ "user_id": "user1", "authorities": [ "authority1", "authority2" ] }'
     )
-    assert user1.user_id == 'user1'
+    assert user1.principal_id == 'user1'
     assert user1.authorities == ['authority1', 'authority2']
 
     user2 = UserInfo.from_json('{ "user_id": "user2", "authorities": "authority1,authority2" }')
-    assert user2.user_id == 'user2'
+    assert user2.principal_id == 'user2'
     assert user2.authorities == ['authority1', 'authority2']
 
 
-def test_parse_json_invalidy():
+def test_with_context():
+    user = UserInfo(
+        'user1', ['role1', 'role2'],
+        username='User One', first_name='User', last_name='One'
+    )
+    assert user.principal_id == 'user1'
+    assert user.as_context() == dict(
+        authorities='role1,role2',
+        username='User One',
+        first_name='User',
+        last_name='One'
+    )
+
+
+def test_parse_json_invalid():
     '''Test parsing various forms of invalid input'''
     with pytest.raises(ValueError):
         UserInfo.from_json('')

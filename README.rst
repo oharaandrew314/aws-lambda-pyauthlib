@@ -69,4 +69,7 @@ Quickstart
 More Information
 ----------------
 
+You can also return an arbitrary authorizer context, by passing kwargs into the *UserInfo*.
+A list of authorities is always required, but nothing is stopping you from using an empty list.
+
 Go check out the `examples <https://github.com/oharaandrew314/aws-lambda-pyauthlib/tree/master/examples>`_!

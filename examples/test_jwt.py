@@ -19,7 +19,11 @@ def lambda_handler(event, _context):
 
     try:
         identity = jwt.decode(event.access_token, JWT_SECRET)
-        user_info = UserInfo(identity['user_id'], identity['authorities'])
+        user_info = UserInfo(
+            identity['user_id'],
+            identity['authorities'],
+            fav_food=identity['fav_food']
+        )
     except DecodeError:
         user_info = None
 
@@ -44,7 +48,6 @@ def test_unauthenticated():
     assert lambda_handler(event, None) == dict(
         principalId='anonymous',
         context=dict(
-            user_id='anonymous',
             authorities='ROLE_ANONYMOUS'
         ),
         policyDocument=dict(
@@ -63,7 +66,7 @@ def test_unauthenticated():
 def test_user():
     '''Test the policy of a read-only user'''
     jwt_token = jwt.encode(
-        dict(user_id='user', authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY'),
+        dict(user_id='user', authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY', fav_food='cookies'),
         JWT_SECRET
     ).decode('utf-8')
 
@@ -75,8 +78,8 @@ def test_user():
     assert lambda_handler(event, None) == dict(
         principalId='user',
         context=dict(
-            user_id='user',
-            authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY'
+            authorities='ROLE_USER,ROLE_RANDOM_AUTHORITY',
+            fav_food='cookies'
         ),
         policyDocument=dict(
             Version='2012-10-17',
@@ -94,7 +97,7 @@ def test_user():
 def test_admin():
     '''Test the policy of an admin user'''
     jwt_token = jwt.encode(
-        dict(user_id='admin', authorities='ROLE_ADMIN'),
+        dict(user_id='admin', authorities='ROLE_ADMIN', fav_food='Tequila'),
         JWT_SECRET
     ).decode('utf-8')
 
@@ -106,8 +109,8 @@ def test_admin():
     assert lambda_handler(event, None) == dict(
         principalId='admin',
         context=dict(
-            user_id='admin',
-            authorities='ROLE_ADMIN'
+            authorities='ROLE_ADMIN',
+            fav_food='Tequila'
         ),
         policyDocument=dict(
             Version='2012-10-17',

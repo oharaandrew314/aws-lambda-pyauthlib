@@ -10,8 +10,8 @@ class IdpClient(object):
     '''
 
     GRANTS = dict(
-        user_token=UserInfo('user', 'ROLE_USER'),
-        admin_token=UserInfo('admin', 'ROLE_ADMIN')
+        user_token=UserInfo('user', 'ROLE_USER', username='testuser', email='user@app.com',),
+        admin_token=UserInfo('admin', 'ROLE_ADMIN', username='testadmin', email='admin@app.com')
     )
 
     def user_info(self, access_token):
@@ -50,7 +50,6 @@ def test_unauthenticated():
     assert lambda_handler(event, None) == dict(
         principalId='anonymous',
         context=dict(
-            user_id='anonymous',
             authorities='ROLE_ANONYMOUS'
         ),
         policyDocument=dict(
@@ -76,8 +75,9 @@ def test_user():
     assert lambda_handler(event, None) == dict(
         principalId='user',
         context=dict(
-            user_id='user',
-            authorities='ROLE_USER'
+            authorities='ROLE_USER',
+            username='testuser',
+            email='user@app.com'
         ),
         policyDocument=dict(
             Version='2012-10-17',
@@ -102,8 +102,9 @@ def test_admin():
     assert lambda_handler(event, None) == dict(
         principalId='admin',
         context=dict(
-            user_id='admin',
-            authorities='ROLE_ADMIN'
+            authorities='ROLE_ADMIN',
+            username='testadmin',
+            email='admin@app.com'
         ),
         policyDocument=dict(
             Version='2012-10-17',

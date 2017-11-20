@@ -78,8 +78,8 @@ class AuthPolicy(object):
         statements.extend(self._get_statement_for_effect('Deny', self.deny_methods))
 
         return dict(
-            principalId=self.user_info.user_id,
-            context=self.user_info.to_dict(),
+            principalId=self.user_info.principal_id,
+            context=self.user_info.as_context(),
             policyDocument=dict(
                 Version=self.VERSION,
                 Statement=statements

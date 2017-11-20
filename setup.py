@@ -9,7 +9,7 @@ with open(README_FILENAME, 'r') as f:
 
 setup(
     name='aws-lambda-pyauthlib',
-    version='0.1.2',
+    version='0.2.0',
     packages=['pyauthlib'],
 
     # PyPI metadata
