@@ -42,7 +42,7 @@ Quickstart
 .. code-block:: python
 
     '''authorizer_handler.py'''
-    from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event
+    from pyauthlib import UserInfo, AuthPolicy, HttpMethod, parse_event, raise_401
     from my_auth_client import get_client
 
     def lambda_handler(event, _context):
@@ -58,7 +58,7 @@ Quickstart
         policy = AuthPolicy(user_info)
 
         if not user_info:
-            policy.deny(event.arn(method=HttpMethod.ALL, resource='*'))
+            raise_401()
         elif 'ROLE_ADMIN' in user_info.authorities:
             policy.allow(event.arn(method=HttpMethod.ALL, resource='*'))
         else:

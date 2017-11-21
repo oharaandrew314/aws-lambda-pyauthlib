@@ -10,3 +10,7 @@ from .auth_event import AuthEvent
 def parse_event(event):
     '''Parse the Authorizer event'''
     return AuthEvent.parse(event)
+
+
+def raise_401():
+    raise Exception('Unauthorized')
