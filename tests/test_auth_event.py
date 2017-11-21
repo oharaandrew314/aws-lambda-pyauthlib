@@ -2,7 +2,7 @@
 
 import pytest
 
-from pyauthlib import parse_event
+from pyauthlib import parse_event, raise_401
 
 
 def test_invalid_access_token():
@@ -30,3 +30,10 @@ def test_parse_event():
 
     assert event.token_type == 'Bearer'
     assert event.access_token == 'foobar'
+
+
+def test_401():
+    with pytest.raises(Exception) as context:
+        raise_401()
+
+    assert str(context.value) == 'Unauthorized'
